@@ -1,0 +1,23 @@
+Frontend:
+npx create-react-app .
+------------------------------------------------------------------------------
+
+Dependências do Backend:
+mkdir config controllers models routes
+
+express: Framework para criar o servidor.
+
+mysql2: Cliente MySQL para Node.js.
+
+cors: Middleware para permitir requisições de diferentes origens.
+
+dotenv: Para gerenciar variáveis de ambiente.
+-----------------------------------------------------------------------------
+PASTAS BECKEND:
+config: Para configurações do banco de dados e outras configurações.
+
+controllers: Para lógica de negócios e manipulação de requisições.
+
+models: Para modelos de dados e interação com o banco de dados.
+
+routes: Para definir as rotas da API.
