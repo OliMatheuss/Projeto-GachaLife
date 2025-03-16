@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Rewards from './pages/Recompensas';
-import Missions from './pages/Missions';
+import Missions from './pages/Missoes';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
