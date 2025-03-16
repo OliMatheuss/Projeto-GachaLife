@@ -25,6 +25,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER, // Usuário do banco de dados
   password: process.env.DB_PASSWORD, // Senha do banco de dados
   database: process.env.DB_NAME, // Nome do banco de dados
+  port: process.env.DB_PORT || 3306, // Porta do MySQL (3306 é o padrão)
 });
 
 // Tenta conectar ao banco de dados
@@ -38,12 +39,14 @@ db.connect((err) => {
   }
 });
 
-// Rotas
+// Compartilha a conexão com o MySQL para ser usada nas rotas
+app.set('db', db); // Adicione esta linha para compartilhar a conexão
 
-// Rota raiz para verificar se a API está funcionando
-app.get('/', (req, res) => {
-  res.send('API está funcionando!'); // Responde com uma mensagem simples
-});
+// Importa as rotas da API
+const apiRoutes = require('./routes/apiRoutes');
+
+// Define o prefixo '/api' para todas as rotas da API
+app.use('/api', apiRoutes);
 
 // Inicia o servidor e escuta na porta definida
 app.listen(PORT, () => {
