@@ -1,34 +1,38 @@
 // backend/routes/apiRoutes.js
 
-// Importação dos módulos necessários
 const express = require('express'); // Framework para criar o servidor
 const router = express.Router(); // Cria um roteador para definir as rotas
+
+// Importa os controladores
+const usuarioController = require('../controllers/usuarioController');
+const missaoController = require('../controllers/missaoController');
+const recompensaController = require('../controllers/recompensaController');no
 
 // Rota raiz para verificar se a API está funcionando
 router.get('/', (req, res) => {
   res.send('API está funcionando!'); // Responde com uma mensagem simples
 });
 
-// Rota para testar a conexão com o banco de dados
-router.get('/test-db', (req, res) => {
-  // Acessa a conexão com o banco de dados diretamente do app (index.js)
-  const db = req.app.get('db'); // Obtém a conexão com o MySQL
+// Rotas para a tabela "usuarios"
+router.get('/usuarios', usuarioController.getAllUsuarios); // Listar todos os usuários
+router.get('/usuarios/:id', usuarioController.getUsuarioById); // Buscar um usuário por ID
+router.post('/usuarios', usuarioController.createUsuario); // Criar um novo usuário
+router.put('/usuarios/:id', usuarioController.updateUsuario); // Atualizar um usuário existente
+router.delete('/usuarios/:id', usuarioController.deleteUsuario); // Excluir um usuário
 
-  // Executa uma query simples (ex: selecionar a versão do MySQL)
-  db.query('SELECT VERSION() AS mysql_version', (err, results) => {
-    if (err) {
-      // Se houver erro, retorna uma mensagem de erro
-      return res.status(500).json({ error: 'Erro ao conectar ao banco de dados' });
-    }
-    // Se a query for bem-sucedida, retorna a versão do MySQL
-    res.json({ message: 'Conexão com o banco de dados bem-sucedida!', version: results[0].mysql_version });
-  });
-});
+// Rotas para a tabela "missoes"
+router.get('/missoes', missaoController.getAllMissoes); // Listar todas as missões
+router.get('/missoes/:id', missaoController.getMissaoById); // Buscar uma missão por ID
+router.post('/missoes', missaoController.createMissao); // Criar uma nova missão
+router.put('/missoes/:id', missaoController.updateMissao); // Atualizar uma missão existente
+router.delete('/missoes/:id', missaoController.deleteMissao); // Excluir uma missão
 
-// Aqui você pode adicionar mais rotas relacionadas às tabelas do banco de dados
-// Exemplo:
-// router.get('/usuarios', usuarioController.getAllUsuarios);
-// router.post('/usuarios', usuarioController.createUsuario);
+// Rotas para a tabela "recompensas"
+router.get('/recompensas', recompensaController.getAllRecompensas); // Listar todas as recompensas
+router.get('/recompensas/:id', recompensaController.getRecompensaById); // Buscar uma recompensa por ID
+router.post('/recompensas', recompensaController.createRecompensa); // Criar uma nova recompensa
+router.put('/recompensas/:id', recompensaController.updateRecompensa); // Atualizar uma recompensa existente
+router.delete('/recompensas/:id', recompensaController.deleteRecompensa); // Excluir uma recompensa
 
 // Exporta o roteador para ser usado no index.js
 module.exports = router;
