@@ -6,7 +6,7 @@ const router = express.Router(); // Cria um roteador para definir as rotas
 // Importa os controladores
 const usuarioController = require('../controllers/usuarioController');
 const missaoController = require('../controllers/missaoController');
-const recompensaController = require('../controllers/recompensaController');no
+const recompensaController = require('../controllers/recompensaController');
 
 // Rota raiz para verificar se a API está funcionando
 router.get('/', (req, res) => {
