@@ -6,7 +6,7 @@ import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import Rewards from './pages/Rewards';
+import Rewards from './pages/Recompensas';
 import Missions from './pages/Missions';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -17,7 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/cadastro" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route
             path="/recompensas"
             element={
