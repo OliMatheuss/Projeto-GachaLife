@@ -1,34 +1,43 @@
-// Importa as bibliotecas necessárias
-import React, { useEffect, useState } from 'react'; // React e hooks (useEffect, useState)
-import axios from 'axios'; // Biblioteca para fazer requisições HTTP
+// src/App.js
 
-// Define o componente principal da aplicação
-function App() {
-  // Cria um estado chamado 'message' com um valor inicial vazio
-  const [message, setMessage] = useState('');
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import Rewards from './pages/Rewards';
+import Missions from './pages/Missions';
+import ProtectedRoute from './components/ProtectedRoute';
 
-  // Usa o hook useEffect para executar código quando o componente é montado
-  useEffect(() => {
-    // Faz uma requisição GET para o backend (rota '/')
-    axios.get('/')
-      .then(response => {
-        // Se a requisição for bem-sucedida, atualiza o estado 'message' com os dados da resposta
-        setMessage(response.data);
-      })
-      .catch(error => {
-        // Se ocorrer um erro, exibe uma mensagem de erro no console
-        console.error('Erro ao conectar ao backend:', error);
-      });
-  }, []); // O array vazio [] significa que o useEffect só será executado uma vez, quando o componente for montado
-
-  // Retorna o JSX que será renderizado na tela
+const App = () => {
   return (
-    <div className="App">
-      <h1>Frontend React</h1> {/* Título da aplicação */}
-      <p>Mensagem do Backend: {message}</p> {/* Exibe a mensagem recebida do backend */}
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/cadastro" element={<SignUp />} />
+          <Route
+            path="/recompensas"
+            element={
+              <ProtectedRoute>
+                <Rewards />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/missoes"
+            element={
+              <ProtectedRoute>
+                <Missions />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
-}
+};
 
-// Exporta o componente App para ser usado em outros arquivos
 export default App;

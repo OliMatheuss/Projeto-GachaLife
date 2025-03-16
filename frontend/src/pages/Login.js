@@ -1,18 +1,23 @@
 // src/pages/Login.js
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await api.post('/login', { email, senha });
       console.log('Login bem-sucedido:', response.data);
-      // Redirecionar para outra página após o login
+      login(); // Atualiza o estado de autenticação
+      navigate('/missoes'); // Redireciona para a página de Missões após o login
     } catch (error) {
       console.error('Erro ao fazer login:', error);
     }
