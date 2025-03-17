@@ -1,0 +1,63 @@
+/* Estilos para a página de cadastro */
+.signup-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.signup-container h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-form label {
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.signup-form button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.signup-form button:hover {
+    background-color: #45a049;
+}
+
+.signup-container p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.signup-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-container a:hover {
+    text-decoration: underline;
+}

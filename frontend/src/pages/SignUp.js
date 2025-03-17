@@ -5,6 +5,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Importando a função signUp do serviço de usuário
 import { signUp } from '../services/usuarioService';
+import './SignUp.css';
+
+
 
 const SignUp = () => {
   // Definindo o estado do formulário com os campos: email, username, senha e confirmação de senha

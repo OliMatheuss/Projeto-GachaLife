@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Missoes from './Missoes';
 import Recompensas from './Recompensas';  // Alterado para RecompensasPage
+import './Inicio.css';
 
 function Inicio() {
     const [username, setUsername] = useState('Carregando...');  // Default como "Carregando..."
