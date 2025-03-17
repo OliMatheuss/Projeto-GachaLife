@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import MissoesPage from '../pages/MissoesPage';
-import LojaPage from '../pages/LojaPage';
+import RecompensasPage from '../pages/RecompensasPage';  // Alterado para RecompensasPage
 
 function Inicio() {
     const [username, setUsername] = useState('');
@@ -26,14 +26,15 @@ function Inicio() {
             <h3>Pontos Totais: {pontos}</h3>
             <nav>
                 <button><Link to="/missoes">Missões</Link></button>
-                <button><Link to="/loja">Loja</Link></button>
+                <button><Link to="/recompensas">Recompensas</Link></button>  {/* Alterado para Recompensas */}
             </nav>
             <Routes>
                 <Route path="/missoes" element={<MissoesPage />} />
-                <Route path="/loja" element={<LojaPage />} />
+                <Route path="/recompensas" element={<RecompensasPage />} />  {/* Alterado para RecompensasPage */}
             </Routes>
         </div>
     );
 }
 
 export default Inicio;
+
