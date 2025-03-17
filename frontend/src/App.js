@@ -8,7 +8,7 @@ import Recompensas from './pages/Recompensas';
 import Missoes from './pages/Missoes'; // Importa a página Missoes
 import Inicio  from './pages/Inicio';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import './App.css';
 const App = () => {
   return (
     <AuthProvider>
