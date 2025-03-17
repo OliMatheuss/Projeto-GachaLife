@@ -1,36 +1,44 @@
-// backend/index.js
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const Usuario = require('./models/Usuario'); // Importa a classe Usuario
 
-// Importação dos módulos necessários
-const express = require('express'); // Framework para criar o servidor
-const cors = require('cors'); // Middleware para permitir requisições de diferentes origens (CORS)
-const dotenv = require('dotenv'); // Módulo para carregar variáveis de ambiente a partir de um arquivo .env
-
-// Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();
 
-// Inicializa o aplicativo Express
 const app = express();
-
-// Define a porta do servidor, usando a variável de ambiente PORT ou 5000 como padrão
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors()); // Habilita o CORS para todas as rotas
-app.use(express.json()); // Permite que o servidor interprete corpos de requisição no formato JSON
+app.use(cors());
+app.use(express.json());
 
-// Importa a conexão com o banco de dados
-const db = require('./config/db');
+// Rota de Login
+app.post('/api/login', (req, res) => {
+  const { email, senha } = req.body;
 
-// Compartilha a conexão com o MySQL para ser usada nas rotas
-app.set('db', db);
+  if (!email || !senha) {
+    return res.status(400).json({ message: 'Email e senha são obrigatórios.' });
+  }
+
+  // Usa o método login da classe Usuario
+  Usuario.login(email, senha, (err, result) => {
+    if (err) {
+      console.error('Erro durante o login:', err);
+      return res.status(500).json({ message: 'Erro no servidor.' });
+    }
+
+    if (result.message === 'Usuário não encontrado.' || result.message === 'Senha incorreta.') {
+      return res.status(401).json({ message: result.message });
+    }
+
+    // Se o login for bem-sucedido, retorna apenas os dados do usuário
+    res.status(200).json({ message: 'Login bem-sucedido!', user: result.user });
+  });
+});
 
 // Importa as rotas da API
 const apiRoutes = require('./routes/apiRoutes');
-
-// Define o prefixo '/api' para todas as rotas da API
 app.use('/api', apiRoutes);
 
-// Inicia o servidor e escuta na porta definida
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`); // Exibe uma mensagem quando o servidor estiver rodando
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

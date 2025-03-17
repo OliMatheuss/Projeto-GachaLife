@@ -1,6 +1,5 @@
-// backend/models/Usuario.js
-
-const db = require('../config/db'); // Importa a conexão com o banco de dados
+// Importa a conexão com o banco de dados
+ const db = require('../config/db'); 
 
 class Usuario {
   // Método para buscar todos os usuários
@@ -36,6 +35,31 @@ class Usuario {
   // Método para excluir um usuário
   static delete(id, callback) {
     db.query('DELETE FROM usuarios WHERE id = ?', [id], callback);
+  }
+
+  // Método para autenticar um usuário (login) sem geração de token
+  static login(email, senha, callback) {
+    // Busca o usuário pelo email
+    db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+
+      if (results.length === 0) {
+        return callback(null, { message: 'Usuário não encontrado.' });
+      }
+
+      const user = results[0];
+
+      // Compara a senha fornecida com a senha armazenada no banco de dados (sem criptografia)
+      if (senha !== user.senha) {
+        return callback(null, { message: 'Senha incorreta.' });
+      }
+
+      // Retorna os dados do usuário (exceto a senha)
+      const userData = { ...user, senha: undefined }; // Remove a senha do objeto
+      callback(null, { message: 'Login bem-sucedido!', user: userData });
+    });
   }
 }
 
