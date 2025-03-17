@@ -19,7 +19,7 @@ const Login = () => {
       console.log('Login bem-sucedido:', response.data);
 
       login(); // Atualiza o estado de autenticação
-      navigate('/missoes'); // Redireciona após login
+      navigate('/inicio'); // Redireciona após login
     } catch (error) {
       console.error('Erro ao fazer login:', error);
 

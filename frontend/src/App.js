@@ -1,13 +1,12 @@
-// src/App.js
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import Rewards from './pages/Recompensas';
-import Missions from './pages/Missoes';
+import Recompensas from './pages/Recompensas';
+import Missoes from './pages/Missoes'; // Importa a página Missoes
+import Inicio  from './pages/Inicio';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -18,19 +17,33 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          
+          {/* Protege a rota de Recompensas */}
           <Route
             path="/recompensas"
             element={
               <ProtectedRoute>
-                <Rewards />
+                <Recompensas />
               </ProtectedRoute>
             }
           />
+          
+          {/* Protege a rota de Missoes */}
           <Route
             path="/missoes"
             element={
               <ProtectedRoute>
-                <Missions />
+                <Missoes />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Protege a rota de Inicio */}
+          <Route
+            path="/inicio"
+            element={
+              <ProtectedRoute>
+                <Inicio />
               </ProtectedRoute>
             }
           />
