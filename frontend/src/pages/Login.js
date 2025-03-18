@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import api from '../services/api';
 import './Login.css';
 
 const Login = () => {
@@ -16,10 +15,7 @@ const Login = () => {
     setError(null); // Limpa o erro antes da tentativa
 
     try {
-      const response = await api.post('/login', { email, senha });
-      console.log('Login bem-sucedido:', response.data);
-
-      login(response.data.user); // Atualiza o estado de autenticação com os dados do usuário
+      await login(email, senha); // Chama a função de login do contexto de autenticação
       navigate('/inicio'); // Redireciona após login
     } catch (error) {
       console.error('Erro ao fazer login:', error);

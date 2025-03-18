@@ -1,5 +1,5 @@
 // Importa a conexão com o banco de dados
- const db = require('../config/db'); 
+const db = require('../config/db');
 
 class Usuario {
   // Método para buscar todos os usuários
@@ -37,7 +37,7 @@ class Usuario {
     db.query('DELETE FROM usuarios WHERE id = ?', [id], callback);
   }
 
-  // Método para autenticar um usuário (login) sem geração de token
+  // Método para autenticar um usuário (login)
   static login(email, senha, callback) {
     // Busca o usuário pelo email
     db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {

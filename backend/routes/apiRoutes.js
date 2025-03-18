@@ -7,6 +7,7 @@ const router = express.Router(); // Cria um roteador para definir as rotas
 const usuarioController = require('../controllers/usuarioController');
 const missaoController = require('../controllers/missaoController');
 const recompensaController = require('../controllers/recompensaController');
+const authenticateToken = require('../middleware/authenticateToken'); // Middleware de autenticação
 
 // Rota raiz para verificar se a API está funcionando
 router.get('/', (req, res) => {
@@ -21,11 +22,11 @@ router.put('/usuarios/:id', usuarioController.updateUsuario); // Atualizar um us
 router.delete('/usuarios/:id', usuarioController.deleteUsuario); // Excluir um usuário
 
 // Rotas para a tabela "missoes"
-router.get('/missoes', missaoController.getAllMissoes); // Listar todas as missões
+router.get('/missoes', authenticateToken, missaoController.getMissoesByUser); // Listar todas as missões do usuário logado
 router.get('/missoes/:id', missaoController.getMissaoById); // Buscar uma missão por ID
-router.post('/missoes', missaoController.createMissao); // Criar uma nova missão
-router.put('/missoes/:id', missaoController.updateMissao); // Atualizar uma missão existente
-router.delete('/missoes/:id', missaoController.deleteMissao); // Excluir uma missão
+router.post('/missoes', authenticateToken, missaoController.createMissao); // Criar uma nova missão
+router.put('/missoes/:id', authenticateToken, missaoController.updateMissao); // Atualizar uma missão existente
+router.delete('/missoes/:id', authenticateToken, missaoController.deleteMissao); // Excluir uma missão
 
 // Rotas para a tabela "recompensas"
 router.get('/recompensas', recompensaController.getAllRecompensas); // Listar todas as recompensas

@@ -6,6 +6,7 @@ const Usuario = require('../models/Usuario'); // Importa o modelo de usuário
 exports.getAllUsuarios = (req, res) => {
   Usuario.getAll((err, results) => {
     if (err) {
+      console.error('Erro ao buscar todos os usuários:', err);
       return res.status(500).json({ error: err.message });
     }
     res.json(results);
@@ -17,6 +18,7 @@ exports.getUsuarioById = (req, res) => {
   const usuarioId = req.params.id;
   Usuario.getById(usuarioId, (err, result) => {
     if (err) {
+      console.error('Erro ao buscar usuário por ID:', err);
       return res.status(500).json({ error: err.message });
     }
     if (!result) {
@@ -31,6 +33,7 @@ exports.createUsuario = (req, res) => {
   const novoUsuario = req.body;
   Usuario.create(novoUsuario, (err, result) => {
     if (err) {
+      console.error('Erro ao criar usuário:', err);
       return res.status(500).json({ error: err.message });
     }
     res.status(201).json({ id: result.insertId, ...novoUsuario });
@@ -43,6 +46,7 @@ exports.updateUsuario = (req, res) => {
   const usuarioAtualizado = req.body;
   Usuario.update(usuarioId, usuarioAtualizado, (err, result) => {
     if (err) {
+      console.error('Erro ao atualizar usuário:', err);
       return res.status(500).json({ error: err.message });
     }
     res.json({ id: usuarioId, ...usuarioAtualizado });
@@ -54,6 +58,7 @@ exports.deleteUsuario = (req, res) => {
   const usuarioId = req.params.id;
   Usuario.delete(usuarioId, (err, result) => {
     if (err) {
+      console.error('Erro ao excluir usuário:', err);
       return res.status(500).json({ error: err.message });
     }
     res.json({ message: 'Usuário excluído com sucesso' });
