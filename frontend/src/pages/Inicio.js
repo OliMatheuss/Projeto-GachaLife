@@ -1,43 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useNavigate, Link, Routes, Route } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import Missoes from './Missoes';
 import Recompensas from './Recompensas';  // Alterado para RecompensasPage
 import './Inicio.css';
 
 function Inicio() {
-    const [username, setUsername] = useState('Carregando...');  // Default como "Carregando..."
-    const [pontos, setPontos] = useState(0);
-    const [loading, setLoading] = useState(true);  // Controle de loading
+    const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        // Simula um ID de usuário logado (isso deve vir da autenticação real)
-        const userId = localStorage.getItem('userId');  // Ou do contexto de autenticação
-
-        if (userId) {
-            fetch(`http://localhost:3001/usuarios/${userId}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setUsername(data.username || 'Usuário não encontrado');
-                    setPontos(data.pontos || 0);
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error('Erro ao buscar usuário:', error);
-                    setLoading(false);
-                });
-        } else {
-            setLoading(false);  // Se não tiver userId, apenas termina o loading
-        }
-    }, []);
-
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     return (
         <div>
-            <h3>Olá, {username}</h3>
-            <h3>Pontos Totais: {pontos}</h3>
+            {user && (
+                <>
+                    <h3>Olá, {user.username}</h3>
+                    <h3>Pontos Totais: {user.pontos}</h3>
+                    <button onClick={handleLogout}>Logout</button>
+                </>
+            )}
             <nav>
                 <button><Link to="/missoes">Missões</Link></button>
                 <button><Link to="/recompensas">Recompensas</Link></button>  {/* Alterado para Recompensas */}

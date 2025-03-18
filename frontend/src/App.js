@@ -6,9 +6,10 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Recompensas from './pages/Recompensas';
 import Missoes from './pages/Missoes'; // Importa a página Missoes
-import Inicio  from './pages/Inicio';
+import Inicio from './pages/Inicio';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
+
 const App = () => {
   return (
     <AuthProvider>
@@ -40,7 +41,7 @@ const App = () => {
           
           {/* Protege a rota de Inicio */}
           <Route
-            path="/inicio"
+            path="/inicio/*"
             element={
               <ProtectedRoute>
                 <Inicio />

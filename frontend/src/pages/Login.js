@@ -19,7 +19,7 @@ const Login = () => {
       const response = await api.post('/login', { email, senha });
       console.log('Login bem-sucedido:', response.data);
 
-      login(); // Atualiza o estado de autenticação
+      login(response.data.user); // Atualiza o estado de autenticação com os dados do usuário
       navigate('/inicio'); // Redireciona após login
     } catch (error) {
       console.error('Erro ao fazer login:', error);
