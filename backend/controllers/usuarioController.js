@@ -30,16 +30,22 @@ exports.getAllUsuarios = (req, res) => {
     res.json(results);
   });
 };
+//Criar um usuario 
+exports.create = (req, res) => {
+  const { email, username, senha } = req.body;
 
-// Controlador para criar um novo usuário
-exports.createUsuario = (req, res) => {
-  const novoUsuario = req.body;
-  Usuario.create(novoUsuario, (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+  // Lógica para salvar o usuário no banco de dados
+  db.query(
+    'INSERT INTO usuarios (email, username, senha) VALUES (?, ?, ?)',
+    [email, username, senha],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao criar usuário:', err);
+        return res.status(500).json({ message: 'Erro no servidor.' });
+      }
+      res.status(201).json({ message: 'Usuário criado com sucesso!' });
     }
-    res.status(201).json({ id: result.insertId, ...novoUsuario });
-  });
+  );
 };
 
 // Controlador para atualizar um usuário existente
