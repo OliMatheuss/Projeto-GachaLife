@@ -17,7 +17,21 @@ router.get('/', (req, res) => {
 // Rotas para a tabela "usuarios"
 router.get('/usuarios', authenticateToken, usuarioController.getAllUsuarios); // Listar todos os usuários (protegido)
 router.get('/usuarios/:id', authenticateToken, usuarioController.getUsuarioById); // Buscar um usuário por ID (protegido)
-router.post('/usuarios', usuarioController.create); // Criar um novo usuário (não protegido)
+router.post(
+  '/usuarios',
+  [
+    body('email').isEmail().withMessage('Email inválido'),
+    body('senha').isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),
+    body('username').notEmpty().withMessage('O nome de usuário é obrigatório'),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    usuarioController.create(req, res);
+  }
+);
 router.put('/usuarios/:id', authenticateToken, usuarioController.updateUsuario); // Atualizar um usuário existente (protegido)
 router.delete('/usuarios/:id', authenticateToken, usuarioController.deleteUsuario); // Excluir um usuário (protegido)
 // Rota de login
