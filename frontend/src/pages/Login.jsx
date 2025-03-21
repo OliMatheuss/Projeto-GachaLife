@@ -1,67 +1,66 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import api from '../services/api';
-import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [error, setError] = useState(null); // Estado para armazenar erro
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Limpa o erro antes da tentativa
+
+    // Validação simples dos campos
+    if (!email || !senha) {
+      setError('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    setLoading(true); // Ativa o estado de carregamento
 
     try {
-      const response = await api.post('/login', { email, senha });
-      console.log('Login bem-sucedido:', response.data);
+      const response = await axios.post('http://localhost:5000/api/login', { email, senha });
+      const { token } = response.data;
 
-      login(); // Atualiza o estado de autenticação
-      navigate('/inicio'); // Redireciona após login
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      console.log('Token recebido do backend:', token); // Log para depuração
 
-      // Verifica se o erro tem resposta do backend
-      if (error.response) {
-        if (error.response.status === 401) {
-          setError('Email ou senha incorretos.');
-        } else {
-          setError('Erro ao tentar fazer login. Tente novamente mais tarde.');
-        }
-      } else {
-        setError('Erro de conexão com o servidor.');
-      }
+      login(token); // Salva o token no contexto e localStorage
+      navigate('/inicio'); // Redireciona para a página "Inicio"
+    } catch (err) {
+      console.error('Erro durante o login:', err);
+      setError('Credenciais inválidas. Tente novamente.');
+    } finally {
+      setLoading(false); // Desativa o estado de carregamento
     }
   };
 
   return (
     <div>
       <h1>Login</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Exibe a mensagem de erro */}
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Senha:</label>
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Entrar</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Entrando...' : 'Entrar'}
+        </button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };

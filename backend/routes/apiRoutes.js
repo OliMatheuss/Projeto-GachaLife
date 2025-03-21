@@ -1,6 +1,6 @@
 const express = require('express'); // Framework para criar o servidor
 const router = express.Router(); // Cria um roteador para definir as rotas
-
+const { body, validationResult } = require('express-validator');
 // Importa os controladores
 const usuarioController = require('../controllers/usuarioController');
 const missaoController = require('../controllers/missaoController');
@@ -20,6 +20,8 @@ router.get('/usuarios/:id', authenticateToken, usuarioController.getUsuarioById)
 router.post('/usuarios', usuarioController.createUsuario); // Criar um novo usuário (não protegido)
 router.put('/usuarios/:id', authenticateToken, usuarioController.updateUsuario); // Atualizar um usuário existente (protegido)
 router.delete('/usuarios/:id', authenticateToken, usuarioController.deleteUsuario); // Excluir um usuário (protegido)
+// Rota de login
+router.post('/login', usuarioController.login);
 
 // Rotas para a tabela "missoes"
 router.get('/missoes', authenticateToken, missaoController.getAllMissoes); // Listar todas as missões (protegido)

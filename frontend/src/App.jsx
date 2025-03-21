@@ -40,7 +40,7 @@ const App = () => {
           
           {/* Protege a rota de Inicio */}
           <Route
-            path="/inicio"
+            path="/inicio/*"
             element={
               <ProtectedRoute>
                 <Inicio />
