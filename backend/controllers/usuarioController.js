@@ -31,13 +31,17 @@ exports.getAllUsuarios = (req, res) => {
   });
 };
 //Criar um usuario 
+const bcrypt = require('bcryptjs');
+
 exports.create = (req, res) => {
   const { email, username, senha } = req.body;
 
-  // Lógica para salvar o usuário no banco de dados
+  // Gera o hash da senha
+  const hashedPassword = bcrypt.hashSync(senha, 10);
+
   db.query(
     'INSERT INTO usuarios (email, username, senha) VALUES (?, ?, ?)',
-    [email, username, senha],
+    [email, username, hashedPassword],
     (err, result) => {
       if (err) {
         console.error('Erro ao criar usuário:', err);
@@ -75,7 +79,6 @@ exports.deleteUsuario = (req, res) => {
 exports.login = (req, res) => {
   const { email, senha } = req.body;
 
-  // Verifica se o usuário existe no banco de dados
   db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
     if (err) {
       console.error('Erro ao buscar usuário:', err);
@@ -88,8 +91,9 @@ exports.login = (req, res) => {
 
     const user = results[0];
 
-    // Verifica se a senha está correta (comparação simples de strings)
-    if (senha !== user.senha) {
+    // Verifica se a senha está correta
+    const senhaCorreta = bcrypt.compareSync(senha, user.senha);
+    if (!senhaCorreta) {
       return res.status(401).json({ message: 'Credenciais inválidas.' });
     }
 
@@ -97,7 +101,7 @@ exports.login = (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, username: user.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1h' } // Define o tempo de expiração do token
+      { expiresIn: '1h' }
     );
 
     res.json({ token });

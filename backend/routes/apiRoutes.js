@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 // Rotas para a tabela "usuarios"
 router.get('/usuarios', authenticateToken, usuarioController.getAllUsuarios); // Listar todos os usuários (protegido)
 router.get('/usuarios/:id', authenticateToken, usuarioController.getUsuarioById); // Buscar um usuário por ID (protegido)
-router.post('/usuarios', usuarioController.createUsuario); // Criar um novo usuário (não protegido)
+router.post('/usuarios', usuarioController.create); // Criar um novo usuário (não protegido)
 router.put('/usuarios/:id', authenticateToken, usuarioController.updateUsuario); // Atualizar um usuário existente (protegido)
 router.delete('/usuarios/:id', authenticateToken, usuarioController.deleteUsuario); // Excluir um usuário (protegido)
 // Rota de login
@@ -36,6 +36,6 @@ router.get('/recompensas/:id', authenticateToken, recompensaController.getRecomp
 router.post('/recompensas', authenticateToken, recompensaController.createRecompensa); // Criar uma nova recompensa (protegido)
 router.put('/recompensas/:id', authenticateToken, recompensaController.updateRecompensa); // Atualizar uma recompensa existente (protegido)
 router.delete('/recompensas/:id', authenticateToken, recompensaController.deleteRecompensa); // Excluir uma recompensa (protegido)
-
+console.log(usuarioController);
 // Exporta o roteador para ser usado no index.js
 module.exports = router;

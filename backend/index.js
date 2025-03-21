@@ -1,11 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const app = express();
 const dotenv = require('dotenv');
 const apiRoutes = require('./routes/apiRoutes'); // Importa as rotas da API
 
 dotenv.config();
 
-const app = express();
+
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
