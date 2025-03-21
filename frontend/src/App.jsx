@@ -6,9 +6,12 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Recompensas from './pages/Recompensas';
 import Missoes from './pages/Missoes'; // Importa a página Missoes
-import Inicio  from './pages/Inicio';
+import Inicio from './pages/Inicio';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
   return (
     <AuthProvider>
@@ -49,6 +52,9 @@ const App = () => {
           />
         </Routes>
       </Router>
+      
+      {/* Componente responsável por exibir os toasts globalmente */}
+      <ToastContainer />
     </AuthProvider>
   );
 };
