@@ -8,49 +8,57 @@ const Login = () => {
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { setIsAuthenticated } = useContext(AuthContext); // Atualiza o estado de autenticação
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validação simples dos campos
+  
     if (!email || !senha) {
       setError('Por favor, preencha todos os campos.');
       return;
     }
-
-    setLoading(true); // Ativa o estado de carregamento
-
+  
+    setLoading(true);
+  
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, senha });
-      const { token } = response.data;
-
-      console.log('Token recebido do backend:', token); // Log para depuração
-
-      login(token); // Salva o token no contexto e localStorage
-      navigate('/inicio'); // Redireciona para a página "Inicio"
+      const response = await axios.post(
+        'http://localhost:5000/api/login',
+        { email, senha },
+        { withCredentials: true } // Inclui cookies na requisição
+      );
+  
+      console.log('Login bem-sucedido:', response.data);
+  
+      setIsAuthenticated(true);
+      navigate('/inicio');
     } catch (err) {
       console.error('Erro durante o login:', err);
       setError('Credenciais inválidas. Tente novamente.');
     } finally {
-      setLoading(false); // Desativa o estado de carregamento
+      setLoading(false);
     }
   };
-
+  
   return (
     <div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email</label>
         <input
           type="email"
+          id="email"
+          name="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <label htmlFor="senha">Senha</label>
         <input
           type="password"
+          id="senha"
+          name="senha"
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}

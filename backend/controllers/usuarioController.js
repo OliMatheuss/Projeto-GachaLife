@@ -75,9 +75,12 @@ exports.deleteUsuario = (req, res) => {
   });
 };
 
-// Controlador para login
 exports.login = (req, res) => {
   const { email, senha } = req.body;
+
+  if (!email || !senha) {
+    return res.status(400).json({ message: 'E-mail e senha são obrigatórios.' });
+  }
 
   db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
     if (err) {
@@ -90,20 +93,24 @@ exports.login = (req, res) => {
     }
 
     const user = results[0];
-
-    // Verifica se a senha está correta
     const senhaCorreta = bcrypt.compareSync(senha, user.senha);
     if (!senhaCorreta) {
       return res.status(401).json({ message: 'Credenciais inválidas.' });
     }
 
-    // Gera o token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, username: user.username },
+      { id: user.id, email: user.email, username: user.username, pontos: user.pontos },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '1h' }
     );
 
-    res.json({ token });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3600000, // 1 hora
+    });
+
+    res.json({ message: 'Login bem-sucedido!' });
   });
 };

@@ -1,11 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useContext(AuthContext);
 
-  console.log('Estado de autenticação:', isAuthenticated);
+  useEffect(() => {
+    console.log('Estado de autenticação no ProtectedRoute:', isAuthenticated);
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     console.log('Usuário não autenticado. Redirecionando para login.');

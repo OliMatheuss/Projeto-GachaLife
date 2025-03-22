@@ -1,50 +1,48 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-
-    if (storedToken) {
+    const verifyAuth = async () => {
       try {
-        const decodedToken = jwtDecode(storedToken);
-        const currentTime = Date.now() / 1000;
+        const response = await axios.get('http://localhost:5000/api/auth/verify', {
+          withCredentials: true, // Inclui cookies na requisição
+        });
 
-        if (decodedToken.exp && decodedToken.exp > currentTime) {
-          setToken(storedToken);
+        if (response.data.isAuthenticated) {
           setIsAuthenticated(true);
+          setUser(response.data.user);
         } else {
-          console.warn('Token expirado. Redirecionando para login.');
-          logout();
+          setIsAuthenticated(false);
+          setUser(null);
         }
       } catch (error) {
-        console.error('Erro ao decodificar o token:', error);
-        logout();
+        console.error('Erro ao verificar autenticação:', error);
+        setIsAuthenticated(false);
+        setUser(null);
       }
-    } else {
-      setIsAuthenticated(false);
-    }
+    };
+
+    verifyAuth();
   }, []);
 
-  const login = (newToken) => {
-    localStorage.setItem('token', newToken);
-    setToken(newToken);
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-    setIsAuthenticated(false);
+  const logout = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/logout', {}, { withCredentials: true });
+      setIsAuthenticated(false);
+      setUser(null);
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, logout }}>
       {children}
     </AuthContext.Provider>
   );
